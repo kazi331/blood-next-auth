@@ -1,0 +1,15 @@
+
+/* Tailwindcss custom classes */
+@layer components {
+  .input-style {
+    @apply bg-transparent focus:border-indigo-400 focus:ring-1 focus:ring-indigo-500 rounded-lg mt-1
+  }
+  .checkbox {
+    @apply text-indigo-600 border-gray-500 rounded focus:border-indigo-600 focus:ring-indigo-600 bg-transparent
+  }
+}
+
+/* Tailwindcss directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
