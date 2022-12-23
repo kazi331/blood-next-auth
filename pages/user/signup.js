@@ -23,7 +23,7 @@ const Signup = ({ session }) => {
   });
 
   async function onSubmit(values) {
-    // console.log(values)
+    console.log(values)
     setLoading(true);
     try {
       const res = await fetch('/api/auth/signup', {

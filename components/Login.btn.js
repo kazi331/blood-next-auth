@@ -4,6 +4,7 @@ import Link from "next/link"
 
 export default function LoginButton() {
   const { data: session, status } = useSession()
+  console.log(session) // print session data
   if (!session) {
     return <Link className="bg-gray-600 py-1 px-3 rounded-lg" href="/user/signin" >Signin</Link>
   }
