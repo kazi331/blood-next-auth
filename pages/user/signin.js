@@ -12,30 +12,31 @@ const Signin = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false)
   const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
+    initialValues: { email: '', password: '', },
     validate: signin_validate,
     onSubmit: onSubmit,
   });
+  const { handleSubmit, getFieldProps, touched, errors } = formik;
+
   async function onSubmit(values) {
     const status = await signIn('credentials', {
       email: values.email,
       password: values.password,
       redirect: false,
-      callbackUrl: '/'
-    }).then(res => {
-      if (res?.error) {
-        console.log({error: res.error})
-        return res.error
-      }
-      else {
-        router.push('/')
-      }
+      callbackUrl: router.query.returnTo || '/dashboard',
     })
+    if (status?.error) {
+      if (status.error.includes('Password')) {
+        errors.password = status.error;
+      }else{
+        errors.email = status.error;
+      }
+      return status.error
+    }
+    if(!status.error){
+      router.push(router.query.returnTo || '/dashboard')
+    }
   }
-  const { handleSubmit, getFieldProps, touched, errors } = formik;
 
   return (
     <div>

@@ -23,7 +23,7 @@ export const authOptions = {
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID,
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
-      version: "2.0",
+      // version: "2.0",
     }),
     CredentialsProvider({
       name: 'Credentials',
@@ -36,7 +36,7 @@ export const authOptions = {
 
         // check if user exists in database
         const result = await User.findOne({ email: credentials.email })
-        console.log({result})
+        // console.log({result})
         if (!result) {
           throw new Error('No user found')
         }

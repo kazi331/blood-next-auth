@@ -3,27 +3,22 @@ import { getSession } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import signup_validate from '../../lib/validate';
 
 
 const Signup = ({ session }) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false)
-
+  const [error, setError] = useState(null);
   const formik = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      password: '',
-      blood: '',
-      isAvailable: false,
-    },
+    initialValues: { name: '', email: '', password: '', blood: '', isAvailable: false, },
     onSubmit: onSubmit,
     validate: signup_validate,
   });
 
   async function onSubmit(values) {
-    console.log(values)
     setLoading(true);
     try {
       const res = await fetch('/api/auth/signup', {
@@ -33,6 +28,13 @@ const Signup = ({ session }) => {
       });
       const data = await res.json();
       console.log(data)
+      if(!data.status){
+        setError(data.message)
+      }
+      if (data.success) {
+        setError(null);
+        router.push('/user/signin');
+      }
       setLoading(false)
     } catch (err) {
       setLoading(false)
@@ -40,7 +42,6 @@ const Signup = ({ session }) => {
     }
   }
   const { handleSubmit, getFieldProps, errors, touched } = formik;
-
 
   return (
     <div>
@@ -68,7 +69,7 @@ const Signup = ({ session }) => {
                   <label htmlFor="email"> Email </label>
                   {/* {errors.email && touched.email ? <div className='text-rose-600'>{errors.email}</div> : null} */}
                 </div>
-                <input {...getFieldProps('email')} className={`${errors.email && touched.email ? 'border-red-600' : ''} input-style`} type="text" name="email" id="email" placeholder="someone@gmail.com" />
+                <input {...getFieldProps('email')} className={`${(errors.email && touched.email) || error ? 'border-red-600' : ''} input-style`} type="text" name="email" id="email" placeholder="someone@gmail.com" />
               </div>
               <div className="flex flex-col mt-3" >
                 <div className="flex items-center justify-between">
@@ -98,7 +99,8 @@ const Signup = ({ session }) => {
                 <input {...getFieldProps('isAvailable')} className='checkbox' type="checkbox" name="isAvailable" id="isAvailable" />
                 <label className='select-none' htmlFor="isAvailable">Are you available to donate now?</label>
               </div>
-              <button type="submit" disabled={loading} className={`py-2 px-4 w-full mt-6 rounded text-white bg-indigo-500 font-bold ${loading && 'opacity-50 cursor-wait'}`}>{loading? 'Processing...' : 'Sign me up'} </button>
+              <p className='text-red-500 text-center mt-2 font-bold'>{error}</p>
+              <button type="submit" disabled={loading} className={`py-2 px-4 w-full mt-6 rounded text-white bg-indigo-500 font-bold ${loading && 'opacity-50 cursor-wait'}`}>{loading ? 'Processing...' : 'Sign me up'} </button>
               <div className="mt-4 text-sm">Have an account? <Link className="text-indigo-400" href="/user/signin">Sign in</Link></div>
             </form>
           </div>
