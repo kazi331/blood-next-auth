@@ -1,10 +1,9 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Spinner } from '../../components/Icons';
-
+import axios from 'axios'
 
 const Update = () => {
   const [errors, setErrors] = useState({ name: '', email: '', phone: '', password: '' });
