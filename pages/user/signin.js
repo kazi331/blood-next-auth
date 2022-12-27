@@ -19,6 +19,7 @@ const Signin = () => {
   const { handleSubmit, getFieldProps, touched, errors } = formik;
 
   async function onSubmit(values) {
+    setLoading(true)
     const status = await signIn('credentials', {
       email: values.email,
       password: values.password,
@@ -26,6 +27,7 @@ const Signin = () => {
       callbackUrl: router.query.returnTo || '/dashboard',
     })
     if (status?.error) {
+      setLoading(false)
       if (status.error.includes('Password')) {
         errors.password = status.error;
       }else{
@@ -34,6 +36,7 @@ const Signin = () => {
       return status.error
     }
     if(!status.error){
+      setLoading(false)
       router.push(router.query.returnTo || '/dashboard')
     }
   }
@@ -67,7 +70,7 @@ const Signin = () => {
                 <input {...getFieldProps('password')} className="input-style pr-10" type="password" name="password" id="password" placeholder="●●●●●●●●●●●●" />
               </div>
 
-              <button type="submit" disabled={loading} className={`py-2 px-4 w-full mt-6 rounded bg-indigo-500 text-white font-bold ${loading && 'opacity-50'}`}> Sign me in </button>
+              <button type="submit" disabled={loading} className={`py-2 px-4 w-full mt-6 rounded bg-indigo-500 text-white font-bold ${loading && 'bg-opacity-50 cursor-wait'}`}> {loading? 'Processing': 'Sign me in'} </button>
               <div className="mt-4 text-sm">Don&apos;t have an account? <Link className="text-indigo-400" href="/user/signup">Sign up</Link>
               </div>
             </form>
