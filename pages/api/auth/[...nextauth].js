@@ -1,13 +1,11 @@
+import bcrypt from 'bcryptjs'
 import NextAuth from "next-auth"
-import FacebookProvider from "next-auth/providers/facebook"
+import CredentialsProvider from "next-auth/providers/credentials"
 import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
-import InstagramProvider from "next-auth/providers/instagram"
-import TwitterProvider from "next-auth/providers/twitter";
-import CredentialsProvider from "next-auth/providers/credentials"
+import TwitterProvider from "next-auth/providers/twitter"
 import connectDB from "../../../database/connection"
 import User from "../../../models/schema"
-import bcrypt from 'bcryptjs'
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -27,12 +25,12 @@ export const authOptions = {
     }),
     CredentialsProvider({
       name: 'Credentials',
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password", placeholder: "********" }
-      },
+      // credentials: {
+      //   username: { label: "Username", type: "text", placeholder: "jsmith" },
+      //   password: { label: "Password", type: "password", placeholder: "********" }
+      // },
       async authorize(credentials, req) {
-        connectDB().catch(err => { connection_error: err }); // connect to database
+        connectDB().catch(err => ({ connection_error: err })); // connect to database
 
         // check if user exists in database
         const result = await User.findOne({ email: credentials.email })
@@ -45,7 +43,7 @@ export const authOptions = {
         if (!isMatch) {
           throw new Error('Password is incorrect')
         }
-        // return user
+        console.log(result)
         return result
       }
     }),
@@ -53,6 +51,13 @@ export const authOptions = {
     // ...add more providers here
   ],
   secret: process.env.SECRET,
+  pages: {
+    signIn: '/user/signin',
+    // signOut: '/user/signout',
+    error: '/user/error', // Error code passed in query string as ?error=
+    // verifyRequest: '/user/verify-request', // (used for check email message)
+    newUser: '/user/new-user' // If set, new users will be directed here on first sign in
+  }
 }
 
 export default NextAuth(authOptions)

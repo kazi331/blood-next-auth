@@ -1,10 +1,13 @@
-import { signOut, useSession } from "next-auth/react";
+import User from '../models/schema'
+import { getSession, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const Secret = () => {
   const router = useRouter();
   const { status, data: session } = useSession();
+
   if (status === 'loading') return 'loading...'
   if (!session) router.push(`/user/signin/?returnTo=${router.asPath}`)
   return (
@@ -19,3 +22,4 @@ const Secret = () => {
 }
 
 export default Secret
+
