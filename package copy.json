@@ -16,6 +16,7 @@
     "@types/react-dom": "18.0.9",
     "axios": "^1.2.1",
     "bcryptjs": "^2.4.3",
+    "blood-next-auth": "link:",
     "eslint": "8.30.0",
     "eslint-config-next": "13.0.7",
     "formik": "^2.2.9",
@@ -25,6 +26,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
+    "test-app": "link:",
     "typescript": "4.9.4"
   },
   "devDependencies": {
